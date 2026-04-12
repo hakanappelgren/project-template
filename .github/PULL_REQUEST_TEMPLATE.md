@@ -14,6 +14,7 @@ _Link to PRD section, ADR, or just explain the motivation._
 - [ ] Non-obvious code has comments explaining *why*
 - [ ] `docs/ARCHITECTURE.md` or `docs/DOMAIN_MODEL.md` updated if anything structural changed
 - [ ] `.env.example` updated if new env vars were added
+- [ ] Does this change make any existing code redundant or harder to follow? If yes, clean it up in this PR.
 
 ## Screenshots (if UI changed)
 
