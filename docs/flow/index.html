@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Flows</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #00968C;
+      --brand-light: #e6f5f4;
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --accent: #F0845C;
+      --step-bg: #f7fafc;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    #sidebar h1 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0 20px 16px;
+    }
+
+    #sidebar .app-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      padding: 0 20px 8px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 8px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover { background: var(--bg); color: var(--text); }
+    .nav-item.active { border-left-color: var(--brand); color: var(--brand); background: var(--brand-light); font-weight: 500; }
+
+    .nav-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+      background: var(--border);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .updated-at {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 16px 20px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    /* Main */
+    #main {
+      flex: 1;
+      padding: 40px;
+      max-width: 860px;
+    }
+
+    .flow-card {
+      display: none;
+    }
+
+    .flow-card.visible {
+      display: block;
+    }
+
+    .flow-header {
+      margin-bottom: 28px;
+    }
+
+    .flow-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .flow-description {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .flow-actors {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .actor-tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--brand-light);
+      color: var(--brand);
+    }
+
+    .happy-tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    /* Steps */
+    .steps-section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      background: var(--step-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .step-content { flex: 1; }
+
+    .step-actor {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .step-action {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-screen {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .step-screen::before { content: "📍 "; }
+
+    .step-notes {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* Edge cases */
+    .edge-cases {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .edge-case {
+      font-size: 14px;
+      color: #92400e;
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .edge-case::before {
+      content: "⚠";
+      position: absolute;
+      left: 0;
+      color: #d97706;
+    }
+
+    /* Empty state */
+    #empty {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    #empty.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="app-name" id="app-name">App Flows</div>
+  <h1>Flows</h1>
+  <div id="nav-items"></div>
+  <div class="updated-at" id="updated-at"></div>
+</nav>
+
+<main id="main">
+  <div id="flow-cards"></div>
+  <div id="empty">
+    <p style="font-size:32px;margin-bottom:12px">📋</p>
+    <p style="font-size:18px;font-weight:600;color:#1a202c;margin-bottom:8px">No flows documented yet</p>
+    <p>Run <code>/flow-doc</code> to generate flow documentation from your app.</p>
+  </div>
+</main>
+
+<script>
+  // Flows data — updated by /flow-doc
+  const DATA_URL = 'flows.json';
+
+  async function loadFlows() {
+    let data;
+    try {
+      const res = await fetch(DATA_URL);
+      data = await res.json();
+    } catch (e) {
+      document.getElementById('empty').classList.add('visible');
+      return;
+    }
+
+    if (!data.flows || data.flows.length === 0) {
+      document.getElementById('empty').classList.add('visible');
+      return;
+    }
+
+    document.getElementById('app-name').textContent = data.app || 'App Flows';
+    document.title = `${data.app || 'App'} — Flows`;
+    if (data.updated) {
+      document.getElementById('updated-at').textContent = `Updated ${data.updated}`;
+    }
+
+    const nav = document.getElementById('nav-items');
+    const cards = document.getElementById('flow-cards');
+
+    data.flows.forEach((flow, i) => {
+      // Nav item
+      const navItem = document.createElement('a');
+      navItem.className = 'nav-item' + (i === 0 ? ' active' : '');
+      navItem.href = '#';
+      navItem.dataset.id = flow.id;
+      navItem.innerHTML = `${flow.name}<span class="nav-badge">${flow.steps.length}</span>`;
+      navItem.addEventListener('click', (e) => {
+        e.preventDefault();
+        showFlow(flow.id);
+      });
+      nav.appendChild(navItem);
+
+      // Flow card
+      const card = document.createElement('div');
+      card.className = 'flow-card' + (i === 0 ? ' visible' : '');
+      card.id = `flow-${flow.id}`;
+
+      const tags = (flow.actors || []).map(a => `<span class="actor-tag">${a}</span>`).join('');
+      const happyTag = flow.happy_path ? '<span class="happy-tag">✓ Happy path</span>' : '';
+
+      const steps = (flow.steps || []).map(s => `
+        <div class="step">
+          <div class="step-number">${s.step}</div>
+          <div class="step-content">
+            <div class="step-actor">${s.actor}</div>
+            <div class="step-action">${s.action}</div>
+            ${s.screen ? `<div class="step-screen">${s.screen}</div>` : ''}
+            ${s.notes ? `<div class="step-notes">${s.notes}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      const edgeCases = flow.edge_cases && flow.edge_cases.length > 0
+        ? `<div class="edge-cases">
+            <div class="section-title" style="margin-bottom:10px">Edge cases</div>
+            ${flow.edge_cases.map(e => `<div class="edge-case">${e}</div>`).join('')}
+           </div>`
+        : '';
+
+      card.innerHTML = `
+        <div class="flow-header">
+          <div class="flow-name">${flow.name}</div>
+          <div class="flow-description">${flow.description}</div>
+          <div class="flow-actors">${tags}${happyTag}</div>
+        </div>
+        <div class="steps-section">
+          <div class="section-title">Steps (${flow.steps.length})</div>
+          ${steps}
+        </div>
+        ${edgeCases}
+      `;
+      cards.appendChild(card);
+    });
+  }
+
+  function showFlow(id) {
+    document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('visible'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const card = document.getElementById(`flow-${id}`);
+    if (card) card.classList.add('visible');
+    const navItem = document.querySelector(`.nav-item[data-id="${id}"]`);
+    if (navItem) navItem.classList.add('active');
+  }
+
+  loadFlows();
+</script>
+</body>
+</html>

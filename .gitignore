@@ -14,8 +14,13 @@ build/
 .env.local
 .env.*.local
 
-# Claude Code local settings (personal, not for team)
+# Claude Code local settings and overrides (personal, not for team)
 .claude/settings.local.json
+CLAUDE.local.md
+
+# Playwright
+playwright-report/
+test-results/
 
 # TypeScript
 *.tsbuildinfo

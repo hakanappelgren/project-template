@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "app": "{{PROJECT_NAME}}",
+  "updated": "{{DATE}}",
+  "flows": [
+    {
+      "id": "example-flow",
+      "name": "Example Flow",
+      "description": "Replace this with your first real user flow. Delete this example.",
+      "actors": ["User", "System"],
+      "happy_path": true,
+      "steps": [
+        {
+          "step": 1,
+          "actor": "User",
+          "action": "Opens the app",
+          "screen": "Home",
+          "notes": "First screen the user sees"
+        },
+        {
+          "step": 2,
+          "actor": "User",
+          "action": "Performs main action",
+          "screen": "Main view",
+          "notes": ""
+        },
+        {
+          "step": 3,
+          "actor": "System",
+          "action": "Processes and responds",
+          "screen": "Result view",
+          "notes": ""
+        }
+      ],
+      "edge_cases": [
+        "What happens if the action fails",
+        "What happens with empty/invalid input"
+      ]
+    }
+  ]
+}

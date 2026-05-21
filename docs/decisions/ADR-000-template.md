@@ -1,35 +1,41 @@
 # ADR-000: [Decision title]
 
-**Date:** YYYY-MM-DD  
-**Status:** Proposed | Accepted | Superseded by ADR-XXX
+**Date:** YYYY-MM-DD
+**Status:** Proposed | Accepted | Superseded by [ADR-XXX]
+**Deciders:** Håkan + team
 
 ---
 
 ## Context
 
-_What situation or problem forced a decision? What constraints existed?_
+_What situation or problem forced a decision? What constraints existed? What forces are at play?_
 
 ## Decision
 
-_What did we decide to do?_
+_What did we decide to do? State it clearly and directly._
 
 ## Alternatives considered
 
-| Option | Why rejected |
-|--------|-------------|
-| Option A | |
-| Option B | |
+| Option | Why not chosen |
+|--------|----------------|
+| Option A | [reason] |
+| Option B | [reason] |
 
 ## Consequences
 
-**Good:**
-- _Benefit 1_
+**Benefits:**
+- [Benefit 1]
 
-**Bad / trade-offs:**
-- _Trade-off 1_
+**Trade-offs / costs:**
+- [Trade-off 1]
+
+**Risks:**
+- [Risk 1 — and how it's mitigated]
 
 ---
 
-> Copy this file, rename to `ADR-001-short-title.md`, and fill it in.
-> Write an ADR for any significant decision: database choice, auth approach,
-> key architectural patterns, third-party services, data modeling choices.
+> **How to use:** Copy this file, rename to `ADR-XXX-short-title.md` (increment number), fill it in.
+> Write an ADR for any significant decision: stack choice, database choice, auth approach, 
+> key architectural pattern, third-party service, LLM provider choice, data model choice.
+> Keep it to 1–2 pages. It should be readable in 5 minutes.
+> Claude reads these to understand constraints — don't skip them.
