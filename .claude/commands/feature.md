@@ -1,82 +1,54 @@
-# /feature — Feature Development Process
+# Feature
 
-Feature to build: **$ARGUMENTS**
-
-Work through this process in order. Show reasoning from each perspective. End with a plan for approval before writing any code.
-
-Read `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/DOMAIN_MODEL.md`, and `docs/flow/flows.json` before starting.
+Build a feature — from idea to implemented, tested, documented code.
 
 ---
 
-## Step 1 — PM: Define the Feature
+## Size check first
 
-"PM hat on."
+**Tiny** (typo, config tweak, one-liner)? Just propose the fix and do it — no process.
 
-For the feature "$ARGUMENTS":
+**Small** (bug fix, minor addition)? Describe what you'll do, implement, test, commit.
 
-1. Write 2–3 user stories: "As a [user], I want [action] so that [outcome]."
-2. Define acceptance criteria (the specific conditions that make this feature complete)
-3. Identify what is NOT in scope for this feature (prevents scope creep)
-4. Check: does this feature affect any existing flows in `docs/flow/flows.json`?
-
-If the task is tiny (typo fix, one-liner, color change): skip to implementation directly, no process needed.
-If the task is small (bug fix, minor addition): just propose the fix, confirm, implement.
-If the task is medium or large: continue with steps 2–4.
+**Medium or Large**? Continue below.
 
 ---
 
-## Step 2 — Tech Lead: Approach
+## Medium / Large features
 
-"Tech Lead hat on."
+### Step 1 — Explore first (don't skip this)
 
-1. How does this feature fit into the existing layer architecture?
-2. What domain entities/value objects are needed?
-3. What use cases go in `application/`?
-4. What infra adapters (if any) are needed?
-5. What are the edge cases and failure modes to handle?
-6. Any technical risks or unknowns?
+If the feature idea is still fuzzy, or you're not sure exactly what to build, start with `/explore [feature name]`. Come back here when the problem is clear.
+
+If you already know exactly what you want, describe it in one clear sentence and carry on.
 
 ---
 
-## Step 3 — Designer: UI Plan (if UI is involved)
+### Step 2 — Plan
 
-"Designer hat on." (Skip this step if feature has no UI.)
+Run the `/plan` sequence from here:
 
-1. Which screens are affected?
-2. What's the user interaction flow?
-3. Which components from so-design-system will you use?
-4. Any new components needed?
-5. Dark mode and accessibility considerations
+**Tech Lead** — how does this fit the existing architecture? What's the approach? Any new dependencies or patterns?
 
----
+**Designer** (if there's UI) — which screens are affected? What's the interaction flow? Which design system components handle this — anything new needed?
 
-## Step 4 — Implementation Plan
+**Architect** — layer changes, data model changes, any new ADR needed?
 
-Write a concrete implementation plan:
+**QA** — edge cases, test strategy, definition of done.
 
-- **Tests to write first** (TDD — list the test cases)
-- **Domain changes** (new entities, value objects, domain logic)
-- **Application changes** (new use cases)
-- **Infra changes** (new adapters if needed)
-- **UI changes** (components, pages)
-- **Docs to update** (flows.json? PRD? ARCHITECTURE?)
-- **Estimated effort** (tiny/small/medium/large)
-
-End with: "Ready to implement when you approve. Anything to change?"
+End with the written plan. Wait for approval.
 
 ---
 
-## Implementation (after approval)
+### Step 3 — Implementation (after approval only)
 
-Once approved:
-
-1. Write failing tests first (TDD red phase)
-2. Implement domain logic to make tests pass (green phase)
-3. Implement application use cases
-4. Implement infra adapters if needed
-5. Build UI
-6. Write E2E test for the flow
-7. Update `docs/flow/flows.json` if any flow changed
-8. Run `npm test` and `npm run test:e2e` — confirm all pass
-9. Run `npm run lint && npm run typecheck` — confirm clean
-10. Commit with conventional commit message: `feat(scope): description`
+1. Write failing tests first (TDD red)
+2. Domain logic — make tests pass (green)
+3. Application use cases (if needed)
+4. Infra adapters (if needed)
+5. UI
+6. E2E test for the flow
+7. Update `flows.json` if the flow changed
+8. `npm test` — all green
+9. Lint + typecheck — clean
+10. Conventional commit: `feat(scope): description`
