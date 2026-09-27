@@ -23,12 +23,12 @@ Depending on $ARGUMENTS, focus on:
 6. Check test coverage: any domain logic without tests?
 
 ### Research mode
-When researching a technical option:
+For anything substantial, dispatch the **researcher agent** (`.claude/agents/researcher.md`) — it returns an evidence-based brief with a PROVEN/CONDITIONAL/BLOCKED/UNKNOWN verdict to `docs/research/[topic].md`. For quick questions, inline:
 1. Search the web for relevant libraries, patterns, or prior art
-2. Check GitHub for real implementations
+2. Check GitHub for real implementations — read the actual mechanism, not just the README
 3. Present 2–3 options with clear pros/cons in plain language
 4. Give a recommendation with reasoning
-5. Identify any technical risks or unknowns
+5. Identify any technical risks or unknowns — platform capabilities get a `/spike`, not a "should work"
 
 ### Tech lead principles
 - Simplest solution that works. No clever abstractions unless clearly justified.

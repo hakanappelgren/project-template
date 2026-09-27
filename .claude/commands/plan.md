@@ -1,95 +1,127 @@
-# Plan
+# /plan — Tech Design
 
-Turns a clear problem into a buildable plan. Run this after `/explore`, or when you already know exactly what you want to build.
-
----
-
-## Input
-
-Pick up from wherever we are:
-- The summary from an `/explore` session
-- `$ARGUMENTS` describing what to build
-- "Continue from our explore" — just carry on
-
-If the problem still feels fuzzy, say so:
-
-> "Before we plan, we should be clear on what we're solving. Either run `/explore [topic]` first, or tell me the problem in one sentence and we'll sharpen it before going further."
+Turns approved acceptance criteria and approved visual design into a buildable tech plan. This is Phase 4 of `/feature` — run after `/design` is approved.
 
 ---
 
-## Step 1 — Tech Lead: Research
+## Before starting
 
-Before any design or architecture decisions, survey the landscape:
+Check that both exist:
+- `features/[name]/acceptance-criteria.md` — confirmed by Håkan ✓
+- `docs/design/[name].html` — approved by Håkan ✓
 
-- What existing solutions, libraries, or patterns are relevant?
-- 2–3 viable approaches — plain-language pros/cons, not a spec
-- Which reference architecture fits?
-  - **A** — local-first (SQLite, file system, no cloud)
-  - **B** — cloud-backed (Supabase, Postgres + RLS)
-  - **C** — AI-powered (Anthropic or Ollama as adapter)
-  - **D** — script/CLI (Python, no web UI)
-- Technical risks and unknowns worth flagging
+If visual design hasn't been approved yet:
+> "Design needs approval before we plan the tech. Run `/design [feature]`, get Håkan's sign-off, then come back here."
 
 ---
 
-## Step 2 — Designer: Flows and screens
+## Step 0 — Capability risk check (before anything else)
 
-Based on the understood problem:
+Does this feature depend on a platform capability not already proven in this codebase? (Audio, background execution, notifications, sensors, offline, file access, real-time, third-party auth — full list in `/spike`.)
 
-- What does the user actually do? (main flow, in plain steps)
-- Key screens — structure in words, not wireframes
-- Which components from the design system handle this?
-- Anything new needed? Accessibility, dark mode, edge states?
+For each such capability, evidence must already exist:
+- `features/[name]/research-brief.md` (or `docs/research/[topic].md`) with verdict **PROVEN**, or
+- a recorded **spike result** proving it works on the real target device
 
----
+**Missing or CONDITIONAL/UNKNOWN → stop.** Dispatch the researcher agent and/or run `/spike` first:
+> "The plan depends on [capability] and we haven't proven it works. A plan built on an unproven assumption is a stall scheduled for later. Running technical discovery first."
 
-## Step 3 — Architect: System design
-
-- Select the reference architecture and note if it needs an ADR
-- Data model and API shape
-- Which layers are touched? (domain / application / infra / UI)
-- Security tier — personal, client data, or sensitive?
-- Cost model impact — does anything change?
+A plan may never contain the phrase "should work" about a platform capability.
 
 ---
 
-## Step 4 — QA: What could go wrong
+## Step 1 — Tech Lead: how does this fit?
 
-- Edge cases that didn't come up in product/design
-- What's the test strategy? Unit / integration / E2E?
-- Definition of done — what does "finished" actually mean?
-
----
-
-## Step 5 — Written plan for approval
-
-Produce this document. Keep it short enough to read in 2 minutes:
+- How does this fit the existing architecture and patterns?
+- Any new libraries or dependencies? (justify each — default is no new deps)
+- Which reference architecture is this touching? (A/B/C/D from ARCHITECTURE.md)
+- Technical risks or unknowns worth calling out before building
+- **Prior art**: has the researcher found how others build this? Reference the mechanism from the research brief — don't reinvent what a production repo already demonstrates
 
 ---
 
-**Problem:** [one sentence]
-**Solution:** [what we're building]
-**Out of scope:** [explicit — don't leave this vague]
+## Step 2 — DDD: bounded context and model
 
-**How we'll build it:**
-- Reference architecture: [A/B/C/D + reason]
-- Layers touched: [which ones and what changes]
-- Key technical decisions: [anything worth recording]
+Answer these before touching any code:
 
-**First slice:** [the smallest thing that validates the approach]
-
-**Tests to write first (TDD):**
-- [failing test 1]
-- [failing test 2]
-
-**Docs to update after:** PRD / ARCHITECTURE / flows.json / ADR / SECURITY — [whichever apply]
-
-**Still open:** [genuine unresolved questions — fine to carry some forward]
+- **Which bounded context does this belong to?** (existing context or new one?)
+- **New aggregate, entity, or value object needed?** Name it in the ubiquitous language.
+- **Does this change the aggregate root?** If yes, why — and is the consistency boundary still right?
+- **Is this truly a domain concern, or is it infrastructure/UI?** Only domain logic goes in `domain/`.
+- If introducing a new bounded context: name it, state its responsibility in one sentence, and create its directory before writing any types.
 
 ---
 
-Then ask:
+## Step 3 — Architect: system design
 
-> "Does this plan work, or do you want to adjust anything before we start?"
+- Which layers are touched? (domain / application / infra / components / app)
+- Data model changes — any schema migration needed for existing data?
+- New ADR needed? (significant decision that future-you needs to understand)
+- Security implications — client data, auth, API calls?
+- Cost model impact — any new paid service?
 
-No code written until Håkan approves.
+---
+
+## Step 4 — QA: test strategy
+
+- Edge cases not already in acceptance criteria?
+- Test strategy: which parts need unit / integration / E2E?
+- First failing tests to write (TDD starting point)
+- Definition of done — must match acceptance criteria exactly, nothing more
+
+---
+
+## Step 5 — Write the plan
+
+Write to `features/[name]/plan.md`:
+
+```markdown
+# Plan — [feature name]
+_Date: [today]_
+
+## What we're building
+[one sentence — the feature and what problem it solves]
+
+## Out of scope
+[explicit list — what we decided not to build]
+
+## Capability risks
+[Per platform capability this feature depends on:
+**[capability]** — [PROVEN / spike result] — [mechanism, one line] — [source: research-brief / spike]
+Or: "none — no new platform capabilities"]
+
+## Domain model
+
+**Bounded context:** [which context — or "new: [name]" if adding one]
+**Aggregate root:** [which aggregate owns this change]
+**New types:** [entity / value object / value type — name and brief description, or "none"]
+**Ubiquitous language additions:** [new terms this feature introduces, or "none"]
+
+## How we're building it
+
+**Layers touched:** [list]
+**Data model changes:** [yes/no — describe if yes]
+**New dependencies:** [list with one-line justification, or "none"]
+**Key decisions:** [anything a future reader needs to understand]
+**ADR needed:** [yes/no — topic if yes]
+
+## First slice
+[The smallest thing that validates the approach and could ship alone]
+
+## Tests to write first (TDD)
+- [ ] [failing test 1 — domain logic]
+- [ ] [failing test 2 — edge case]
+- [ ] [failing test 3 — application use case]
+
+## Docs to update after build
+- [ ] PRD.md current state (always)
+- [ ] ARCHITECTURE.md (if layers or data model changed)
+- [ ] flows.json (if flow changed)
+- [ ] ADR (if needed)
+- [ ] SECURITY.md (if security tier changed)
+```
+
+Then:
+> "Plan written to `features/[name]/plan.md`. Ready to build — or anything to adjust first?"
+
+No code until Håkan approves.

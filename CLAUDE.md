@@ -34,7 +34,8 @@ _Fill in after initial setup. 5–8 files max._
 | `docs/ARCHITECTURE.md` | System design, cost model, ADR index |
 | `docs/flow/flows.json` | Machine-readable app flows (LLM context) |
 | `docs/design/` | HTML mockups — one per feature, reviewed before build |
-| `features/` | Per-feature artifacts: acceptance criteria + plan (permanent history) |
+| `docs/research/` | Research briefs + spike results — capability verdicts (permanent evidence) |
+| `features/` | Per-feature artifacts: acceptance criteria + research brief + plan (permanent history) |
 | `src/domain/` | Business logic — test this first |
 | `src/application/` | Use cases — orchestrate domain logic |
 | `src/app/page.tsx` | Homepage |
@@ -90,17 +91,37 @@ At the start of every continuation session:
 For medium / large work, follow this order. No skipping steps. No building before design is approved.
 
 ```
-1. Understand     /explore or /kickoff    → problem statement, for whom, why now
-2. Acceptance     /feature (Phase 2)      → features/[name]/acceptance-criteria.md
-3. Visual design  /design                 → docs/design/[name].html
-                                            ↑ GATE — Håkan approves screens
-4. Tech design    /plan                   → features/[name]/plan.md
-                                            ↑ GATE — Håkan approves plan
-5. Build          /feature (Phase 5)      → TDD → implement → all tests green
-6. Review         /review [name]          → adversarial check vs acceptance criteria
-                                            ↑ GATE — must pass before merge
-7. Close          /close-feature [name]   → update living docs, archive artifacts
+1. Understand       /explore or /kickoff    → problem statement, for whom, why now
+2. Acceptance       /feature (Phase 2)      → features/[name]/acceptance-criteria.md
+3. Tech discovery   researcher + /spike     → research-brief.md — only if new platform
+                                              capabilities are involved
+                                              ↑ GATE — no unproven capability enters the plan
+4. Visual design    designer agent          → docs/design/[name].html
+                                              ↑ GATE — Håkan approves screens
+5. Tech design      /plan (lead)            → features/[name]/plan.md
+                                              ↑ GATE — Håkan approves plan
+6. Build            builder agent           → TDD → implement → all tests green
+7. Review           reviewer agent (fresh)  → adversarial check vs acceptance criteria
+                                              ↑ GATE — must pass before merge
+8. Close            doc-keeper agent        → update living docs, archive artifacts
 ```
+
+Discovery is two-sided: steps 1–2 from the user/functionality perspective, step 3 from the technical perspective. "We can't do X" is a hypothesis, never a verdict — it gets a researcher verdict (PROVEN / CONDITIONAL / BLOCKED / UNKNOWN) and a `/spike` on the real device if unresolved.
+
+## The team — one lead, dispatched specialists
+
+The **lead** is the main session (strongest model available). It talks to Håkan, holds the gates, makes architecture decisions, and dispatches work. It writes code itself only for tiny/small work. Specialists start cold — **the artifacts are the dispatch payload** (acceptance-criteria.md, research-brief.md, plan.md, design html). Full rules: `.claude/agents/README.md`.
+
+| Agent | Model | Dispatched for |
+|-------|-------|----------------|
+| researcher | sonnet | Prior art on GitHub/web, capability feasibility verdicts |
+| designer | sonnet | HTML mockups from acceptance criteria |
+| builder | sonnet | Implementation from approved plan + mockup |
+| test-writer | haiku | Tests from an approved test plan |
+| reviewer | opus | Pre-merge review — fresh context, diff + artifacts only |
+| doc-keeper | haiku | close-feature, handoff, flow-doc, standup |
+
+Models are aliases (tiers), never version strings — the setup survives model/plan changes untouched.
 
 ## Agent team — available commands
 
@@ -110,7 +131,8 @@ For medium / large work, follow this order. No skipping steps. No building befor
 | `/feature <name>` | Build a feature: 7-phase sequence from understand to close |
 | `/explore [topic]` | Open-ended discovery — stay in problem space, no solutions yet |
 | `/design [name]` | Visual design → HTML mockup in docs/design/[name].html |
-| `/plan [name]` | Tech design → architecture + layers + plan.md |
+| `/plan [name]` | Tech design → architecture + layers + plan.md (requires capability evidence) |
+| `/spike [capability]` | Throwaway proof of a risky platform capability on the real device |
 | `/review [name]` | Adversarial review vs acceptance criteria before merging |
 | `/close-feature <name>` | Update living docs + archive feature artifacts after review passes |
 | `/pm [topic]` | Deepen requirements, update PRD |
@@ -124,14 +146,16 @@ For medium / large work, follow this order. No skipping steps. No building befor
 
 ## Effort calibration
 
-Match effort to task size — don't over-engineer:
+Match effort to task size — don't over-engineer. **The lead classifies every incoming request against this table first**, then routes:
 
-| Size | Examples | Process |
-|------|---------|---------|
-| **Tiny** | Typo, color change, one-liner | Just do it |
-| **Small** | Bug fix, add a field, minor style | Fix + test + commit |
-| **Medium** | New screen, new API endpoint | `/feature` process |
-| **Large** | New domain area, new integration | `/kickoff`-style |
+| Size | Examples | Process | Who does the work |
+|------|---------|---------|-------------------|
+| **Tiny** | Typo, color change, one-liner | Just do it | Lead, directly — no dispatch |
+| **Small** | Bug fix, add a field, minor style | Fix + test + commit | Lead, directly — no dispatch |
+| **Medium** | New screen, new API endpoint | `/feature` process | Lead orchestrates, agents execute |
+| **Large** | New domain area, new integration, new product branch | `/kickoff`-style | Lead orchestrates, agents execute, full tech discovery |
+
+Dispatching agents for tiny/small work is overkill — the machinery exists for medium/large only. When in doubt between small and medium, ask: does this need acceptance criteria? If yes, it's medium.
 
 ## Design rules
 
