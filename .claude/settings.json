@@ -6,10 +6,21 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT_COMMAND\" | grep -qE '^git commit'; then npm run lint -- --max-warnings 0 && npm run typecheck || (echo '\\n❌ Lint or typecheck failed — fix before committing.' && exit 1); fi"
+            "command": "cmd=$(jq -r '.tool_input.command // empty'); if printf '%s' \"$cmd\" | grep -qE '(^|[;&|] *)git commit'; then { npm run lint -- --max-warnings 0 && npm run typecheck; } >&2 || { echo '❌ Lint or typecheck failed — fix before committing.' >&2; exit 2; }; fi"
           }
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "hakan-devteam": {
+      "source": {
+        "source": "github",
+        "repo": "hakanappelgren/claude-devteam"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "devteam@hakan-devteam": true
   }
 }

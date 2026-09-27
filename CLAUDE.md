@@ -4,15 +4,15 @@
 
 ## Stack
 
-| Concern | Choice |
-|---------|--------|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript (strict) |
-| Styling | Tailwind CSS v4 + so-design-system |
-| Backend | _fill in_ |
-| LLM | _Ollama (local) / Anthropic API — see .env.example_ |
-| Testing | Vitest + Testing Library + Playwright |
-| Dev server | `npm run dev` → http://localhost:3000 |
+| Concern    | Choice                                              |
+| ---------- | --------------------------------------------------- |
+| Framework  | Next.js 15 (App Router)                             |
+| Language   | TypeScript (strict)                                 |
+| Styling    | Tailwind CSS v4 + so-design-system                  |
+| Backend    | _fill in_                                           |
+| LLM        | _Ollama (local) / Anthropic API — see .env.example_ |
+| Testing    | Vitest + Testing Library + Playwright               |
+| Dev server | `npm run dev` → http://localhost:3000               |
 
 ## Dev server
 
@@ -28,17 +28,17 @@ Check `docs/HANDOFF.md` first if this is a continuation session.
 
 _Fill in after initial setup. 5–8 files max._
 
-| File | Purpose |
-|------|---------|
-| `docs/PRD.md` | Product requirements + current state (what's built now) |
-| `docs/ARCHITECTURE.md` | System design, cost model, ADR index |
-| `docs/flow/flows.json` | Machine-readable app flows (LLM context) |
-| `docs/design/` | HTML mockups — one per feature, reviewed before build |
-| `docs/research/` | Research briefs + spike results — capability verdicts (permanent evidence) |
-| `features/` | Per-feature artifacts: acceptance criteria + research brief + plan (permanent history) |
-| `src/domain/` | Business logic — test this first |
-| `src/application/` | Use cases — orchestrate domain logic |
-| `src/app/page.tsx` | Homepage |
+| File                   | Purpose                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| `docs/PRD.md`          | Product requirements + current state (what's built now)                                |
+| `docs/ARCHITECTURE.md` | System design, cost model, ADR index                                                   |
+| `docs/flow/flows.json` | Machine-readable app flows (LLM context)                                               |
+| `docs/design/`         | HTML mockups — one per feature, reviewed before build                                  |
+| `docs/research/`       | Research briefs + spike results — capability verdicts (permanent evidence)             |
+| `features/`            | Per-feature artifacts: acceptance criteria + research brief + plan (permanent history) |
+| `src/domain/`          | Business logic — test this first                                                       |
+| `src/application/`     | Use cases — orchestrate domain logic                                                   |
+| `src/app/page.tsx`     | Homepage                                                                               |
 
 ## DDD — Domain-Driven Design
 
@@ -48,17 +48,18 @@ This project is built around explicit **bounded contexts**. Each context owns it
 
 **DDD vocabulary — use these terms consistently:**
 
-| Term | Meaning |
-|------|---------|
-| **Aggregate root** | Consistency boundary — all mutations go through it |
-| **Entity** | Has an id, lives inside an aggregate |
-| **Value object** | No identity, replaced not mutated |
-| **Value type** | Immutable descriptor (e.g. an enum-like type) |
-| **Domain service** | Stateless function on domain concepts |
-| **Factory** | Only constructor for aggregate members — assigns id + defaults |
-| **Repository** | Persistence interface for an aggregate (lives in infra/) |
+| Term               | Meaning                                                        |
+| ------------------ | -------------------------------------------------------------- |
+| **Aggregate root** | Consistency boundary — all mutations go through it             |
+| **Entity**         | Has an id, lives inside an aggregate                           |
+| **Value object**   | No identity, replaced not mutated                              |
+| **Value type**     | Immutable descriptor (e.g. an enum-like type)                  |
+| **Domain service** | Stateless function on domain concepts                          |
+| **Factory**        | Only constructor for aggregate members — assigns id + defaults |
+| **Repository**     | Persistence interface for an aggregate (lives in infra/)       |
 
 **Rules:**
+
 - Mutations go through the aggregate root — never mutate children and sync around them
 - Factories are the only constructors — don't build domain objects ad-hoc outside the domain layer
 - Name the bounded context before writing domain code for a new area
@@ -74,6 +75,7 @@ src/app/          ← Next.js pages and API routes
 ```
 
 **Hard rules:**
+
 - `domain/` never imports from any other layer — ever
 - `application/` imports only `domain/` (and framework hooks like React)
 - `components/` never imports from `infra/`
@@ -82,6 +84,7 @@ src/app/          ← Next.js pages and API routes
 ## Session start
 
 At the start of every continuation session:
+
 1. Read `docs/HANDOFF.md` — last session's state and next actions
 2. Check `features/` for any in-progress feature artifacts
 3. Run `npm run dev` (see Dev server above)
@@ -110,50 +113,52 @@ Discovery is two-sided: steps 1–2 from the user/functionality perspective, ste
 
 ## The team — one lead, dispatched specialists
 
-The **lead** is the main session (strongest model available). It talks to Håkan, holds the gates, makes architecture decisions, and dispatches work. It writes code itself only for tiny/small work. Specialists start cold — **the artifacts are the dispatch payload** (acceptance-criteria.md, research-brief.md, plan.md, design html). Full rules: `.claude/agents/README.md`.
+The **lead** is the main session (strongest model available). It talks to Håkan, holds the gates, makes architecture decisions, and dispatches work. It writes code itself only for tiny/small work. Specialists start cold — **the artifacts are the dispatch payload** (acceptance-criteria.md, research-brief.md, plan.md, design html). Full rules: `TEAM.md` in the devteam plugin.
 
-| Agent | Model | Dispatched for |
-|-------|-------|----------------|
-| researcher | sonnet | Prior art on GitHub/web, capability feasibility verdicts |
-| designer | sonnet | HTML mockups from acceptance criteria |
-| builder | sonnet | Implementation from approved plan + mockup |
-| test-writer | haiku | Tests from an approved test plan |
-| reviewer | opus | Pre-merge review — fresh context, diff + artifacts only |
-| doc-keeper | haiku | close-feature, handoff, flow-doc, standup |
+| Agent       | Model  | Dispatched for                                           |
+| ----------- | ------ | -------------------------------------------------------- |
+| researcher  | sonnet | Prior art on GitHub/web, capability feasibility verdicts |
+| designer    | sonnet | HTML mockups from acceptance criteria                    |
+| builder     | sonnet | Implementation from approved plan + mockup               |
+| test-writer | haiku  | Tests from an approved test plan                         |
+| reviewer    | opus   | Pre-merge review — fresh context, diff + artifacts only  |
+| doc-keeper  | haiku  | close-feature, handoff, flow-doc, standup                |
 
 Models are aliases (tiers), never version strings — the setup survives model/plan changes untouched.
 
 ## Agent team — available commands
 
-| Command | Purpose |
-|---------|---------|
-| `/kickoff` | New project: full discovery → visual design → tech design → ready to build |
-| `/feature <name>` | Build a feature: 7-phase sequence from understand to close |
-| `/explore [topic]` | Open-ended discovery — stay in problem space, no solutions yet |
-| `/design [name]` | Visual design → HTML mockup in docs/design/[name].html |
-| `/plan [name]` | Tech design → architecture + layers + plan.md (requires capability evidence) |
-| `/spike [capability]` | Throwaway proof of a risky platform capability on the real device |
-| `/review [name]` | Adversarial review vs acceptance criteria before merging |
-| `/close-feature <name>` | Update living docs + archive feature artifacts after review passes |
-| `/pm [topic]` | Deepen requirements, update PRD |
-| `/tech-lead [topic]` | Research options, codebase health check, refactor |
-| `/architect [topic]` | Architecture decisions, write ADRs |
-| `/qa [topic]` | Test plans, write E2E tests |
-| `/retro` | Sprint retrospective + update Lessons Learned |
-| `/standup` | Quick status: what shipped, what's next, any blockers |
-| `/flow-doc` | Regenerate docs/flow/ documentation |
-| `/handoff` | Write session handoff before closing |
+**The shared agents and commands come from the `devteam` plugin** (repo `hakanappelgren/claude-devteam`, enabled in `.claude/settings.json`). Type them as `/devteam:<name>`. Change them in that repo, never here — project-specific rules go in this file.
+
+| Command                 | Purpose                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `/kickoff`              | New project: full discovery → visual design → tech design → ready to build   |
+| `/feature <name>`       | Build a feature: 7-phase sequence from understand to close                   |
+| `/explore [topic]`      | Open-ended discovery — stay in problem space, no solutions yet               |
+| `/design [name]`        | Visual design → HTML mockup in docs/design/[name].html                       |
+| `/plan [name]`          | Tech design → architecture + layers + plan.md (requires capability evidence) |
+| `/spike [capability]`   | Throwaway proof of a risky platform capability on the real device            |
+| `/review [name]`        | Adversarial review vs acceptance criteria before merging                     |
+| `/close-feature <name>` | Update living docs + archive feature artifacts after review passes           |
+| `/pm [topic]`           | Deepen requirements, update PRD                                              |
+| `/tech-lead [topic]`    | Research options, codebase health check, refactor                            |
+| `/architect [topic]`    | Architecture decisions, write ADRs                                           |
+| `/qa [topic]`           | Test plans, write E2E tests                                                  |
+| `/retro`                | Sprint retrospective + update Lessons Learned                                |
+| `/standup`              | Quick status: what shipped, what's next, any blockers                        |
+| `/flow-doc`             | Regenerate docs/flow/ documentation                                          |
+| `/handoff`              | Write session handoff before closing                                         |
 
 ## Effort calibration
 
 Match effort to task size — don't over-engineer. **The lead classifies every incoming request against this table first**, then routes:
 
-| Size | Examples | Process | Who does the work |
-|------|---------|---------|-------------------|
-| **Tiny** | Typo, color change, one-liner | Just do it | Lead, directly — no dispatch |
-| **Small** | Bug fix, add a field, minor style | Fix + test + commit | Lead, directly — no dispatch |
-| **Medium** | New screen, new API endpoint | `/feature` process | Lead orchestrates, agents execute |
-| **Large** | New domain area, new integration, new product branch | `/kickoff`-style | Lead orchestrates, agents execute, full tech discovery |
+| Size       | Examples                                             | Process             | Who does the work                                      |
+| ---------- | ---------------------------------------------------- | ------------------- | ------------------------------------------------------ |
+| **Tiny**   | Typo, color change, one-liner                        | Just do it          | Lead, directly — no dispatch                           |
+| **Small**  | Bug fix, add a field, minor style                    | Fix + test + commit | Lead, directly — no dispatch                           |
+| **Medium** | New screen, new API endpoint                         | `/feature` process  | Lead orchestrates, agents execute                      |
+| **Large**  | New domain area, new integration, new product branch | `/kickoff`-style    | Lead orchestrates, agents execute, full tech discovery |
 
 Dispatching agents for tiny/small work is overkill — the machinery exists for medium/large only. When in doubt between small and medium, ask: does this need acceptance criteria? If yes, it's medium.
 
@@ -177,10 +182,10 @@ Dispatching agents for tiny/small work is overkill — the machinery exists for 
 
 See `.env.example`. Copy to `.env.local` (gitignored).
 
-| Variable | Purpose |
-|----------|---------|
-| `LLM_PROVIDER` | `ollama` (default, local, free) or `anthropic` |
-| `OLLAMA_MODEL` | Ollama model name (e.g. `llama3.2`) |
+| Variable            | Purpose                                            |
+| ------------------- | -------------------------------------------------- |
+| `LLM_PROVIDER`      | `ollama` (default, local, free) or `anthropic`     |
+| `OLLAMA_MODEL`      | Ollama model name (e.g. `llama3.2`)                |
 | `ANTHROPIC_API_KEY` | Anthropic API key (only if LLM_PROVIDER=anthropic) |
 
 ## Testing rules — Claude owns this
@@ -188,15 +193,18 @@ See `.env.example`. Copy to `.env.local` (gitignored).
 Tests are not optional homework for later. They are part of the commit that introduces the logic.
 
 **What to test (always):**
+
 - `src/domain/` — every factory function and business rule. Pure functions, zero cost.
 - `src/infra/` — every storage and API adapter. Use in-memory fakes or `fake-indexeddb` where needed.
 - `src/application/` — any stateful logic that could silently break. Extract pure functions where possible; use `renderHook` for hooks only when the logic can't be extracted.
 
 **What NOT to test:**
+
 - UI components (`src/components/`) — only if they contain business logic. Not for rendering or layout.
 - Styling, layout, visual appearance — zero value, high fragility.
 
 **How to do it:**
+
 1. Write one failing test describing the behavior before writing implementation.
 2. Implement until it passes.
 3. Add edge-case tests for anything surprising during implementation.
