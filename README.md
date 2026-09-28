@@ -14,14 +14,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm test` | Run tests once |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run lint` | Lint check |
-| `npm run typecheck` | TypeScript type check |
-| `npm run build` | Production build |
+| Command              | Description              |
+| -------------------- | ------------------------ |
+| `npm run dev`        | Start development server |
+| `npm test`           | Run tests once           |
+| `npm run test:watch` | Run tests in watch mode  |
+| `npm run lint`       | Lint check               |
+| `npm run typecheck`  | TypeScript type check    |
+| `npm run build`      | Production build         |
 
 ## Docs
 

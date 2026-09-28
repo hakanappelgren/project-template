@@ -11,12 +11,15 @@ _Written by `/handoff` at the end of each session. Read this first at the start 
 ## Status
 
 **Completed this session:**
+
 - _[list]_
 
 **In progress / partially done:**
+
 - _[what's started but not finished]_
 
 **Not started yet:**
+
 - _[what's planned but untouched]_
 
 ---

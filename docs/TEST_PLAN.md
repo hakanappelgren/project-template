@@ -11,13 +11,13 @@ Bad tests: rendering output, CSS, things that are just a React prop pass-through
 
 ## What to test and where
 
-| Layer | Framework | When | Threshold |
-|-------|-----------|------|-----------|
-| `src/domain/` | Vitest | Always — write before implementing | Every factory fn + every business rule |
-| `src/infra/` | Vitest | Always — use fake adapters (fake-indexeddb etc.) | Every public function |
-| `src/application/` | Vitest | When logic is non-trivial or has caused bugs | Extract pure fns where possible; renderHook as last resort |
-| `src/components/` | — | Only if it contains business logic | Skip rendering/layout tests |
-| E2E | Playwright | One per major flow, after the flow is stable | Happy path + the most important error state |
+| Layer              | Framework  | When                                             | Threshold                                                  |
+| ------------------ | ---------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| `src/domain/`      | Vitest     | Always — write before implementing               | Every factory fn + every business rule                     |
+| `src/infra/`       | Vitest     | Always — use fake adapters (fake-indexeddb etc.) | Every public function                                      |
+| `src/application/` | Vitest     | When logic is non-trivial or has caused bugs     | Extract pure fns where possible; renderHook as last resort |
+| `src/components/`  | —          | Only if it contains business logic               | Skip rendering/layout tests                                |
+| E2E                | Playwright | One per major flow, after the flow is stable     | Happy path + the most important error state                |
 
 ---
 
@@ -25,12 +25,12 @@ Bad tests: rendering output, CSS, things that are just a React prop pass-through
 
 _Update as you add tests._
 
-| Area | Test file | Status |
-|------|-----------|--------|
-| `domain/[entity]` | `domain/[entity]/__tests__/[entity].test.ts` | ⬜ |
-| `infra/[adapter]` | `infra/[adapter]/__tests__/[adapter].test.ts` | ⬜ |
-| `application/[hook]` | `application/[hook]/__tests__/[logic].test.ts` | ⬜ |
-| _[main user flow]_ | `tests/e2e/[flow].spec.ts` | ⬜ |
+| Area                 | Test file                                      | Status |
+| -------------------- | ---------------------------------------------- | ------ |
+| `domain/[entity]`    | `domain/[entity]/__tests__/[entity].test.ts`   | ⬜     |
+| `infra/[adapter]`    | `infra/[adapter]/__tests__/[adapter].test.ts`  | ⬜     |
+| `application/[hook]` | `application/[hook]/__tests__/[logic].test.ts` | ⬜     |
+| _[main user flow]_   | `tests/e2e/[flow].spec.ts`                     | ⬜     |
 
 Legend: ✅ covered · ⚠️ partial · ⬜ missing
 
@@ -61,6 +61,7 @@ Do not skip step 1. If you find it hard to write a test first, the function prob
 ## Regression rule
 
 When a bug is fixed, add a test that would have caught it. Name the test after what it prevents. Example:
+
 ```ts
 it('does NOT overwrite connections when a node is dragged — regression for edge-wiping bug', () => {
 ```

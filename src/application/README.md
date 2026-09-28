@@ -33,7 +33,7 @@ Write the use case test first using in-memory implementations of domain ports:
 
 ```typescript
 // tests/unit/create-item.test.ts
-const repo = new InMemoryItemRepository()  // in-memory port impl
+const repo = new InMemoryItemRepository() // in-memory port impl
 const useCase = new CreateItemUseCase(repo)
 
 test('creates an item', async () => {

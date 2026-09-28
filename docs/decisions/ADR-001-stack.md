@@ -28,17 +28,18 @@ _Fill in the specific data storage, LLM, and auth choices below after kickoff._
 
 ## Alternatives considered
 
-| Option | Why not chosen |
-|--------|----------------|
-| Vite + React (no Next.js) | Next.js gives API routes + SSR + deployment in one; Vite needs separate backend |
-| Remix | Less ecosystem, less Vercel integration, smaller community |
-| Plain Express backend | More moving parts; Next.js API routes sufficient at this scale |
-| JavaScript (no TS) | TypeScript strict mode catches errors Claude and humans miss |
-| CSS modules / styled-components | Tailwind utility-first is faster and AI agents understand it deeply |
+| Option                          | Why not chosen                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------------- |
+| Vite + React (no Next.js)       | Next.js gives API routes + SSR + deployment in one; Vite needs separate backend |
+| Remix                           | Less ecosystem, less Vercel integration, smaller community                      |
+| Plain Express backend           | More moving parts; Next.js API routes sufficient at this scale                  |
+| JavaScript (no TS)              | TypeScript strict mode catches errors Claude and humans miss                    |
+| CSS modules / styled-components | Tailwind utility-first is faster and AI agents understand it deeply             |
 
 ## Consequences
 
 **Benefits:**
+
 - Consistent with all other Håkan projects — shared knowledge, shared tooling
 - Next.js App Router + Vercel = zero-config deployment
 - TypeScript strict catches errors at compile time — safe for agent delegation
@@ -46,8 +47,10 @@ _Fill in the specific data storage, LLM, and auth choices below after kickoff._
 - Vitest is fast and integrates with Testing Library
 
 **Trade-offs:**
+
 - Next.js adds some complexity vs plain React for fully client-side tools
 - Tailwind v4 API is newer — some community patterns still use v3
 
 **Risks:**
+
 - None significant at this scale

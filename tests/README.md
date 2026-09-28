@@ -2,11 +2,11 @@
 
 ## Where tests live
 
-| Folder | What goes here |
-|--------|----------------|
-| `tests/` | Unit tests for domain logic and utilities |
-| `tests/integration/` | Tests that hit a real DB or external API |
-| Playwright (if added) | End-to-end browser tests |
+| Folder                | What goes here                            |
+| --------------------- | ----------------------------------------- |
+| `tests/`              | Unit tests for domain logic and utilities |
+| `tests/integration/`  | Tests that hit a real DB or external API  |
+| Playwright (if added) | End-to-end browser tests                  |
 
 ## TDD for domain logic
 

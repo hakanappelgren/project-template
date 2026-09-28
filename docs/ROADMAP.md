@@ -8,9 +8,9 @@ _Updated after each sprint by `/retro`. Milestones ordered by priority._
 
 _What's actively being built._
 
-| Item | Status | Notes |
-|------|--------|-------|
-| _Initial setup_ | ⏳ In progress | |
+| Item            | Status         | Notes |
+| --------------- | -------------- | ----- |
+| _Initial setup_ | ⏳ In progress |       |
 
 ---
 
@@ -36,8 +36,8 @@ _Desired but not scheduled. Not blocking current work._
 
 _Completed milestones (most recent first)._
 
-| Date | Item |
-|------|------|
+| Date         | Item              |
+| ------------ | ----------------- |
 | _YYYY-MM-DD_ | _Project kickoff_ |
 
 ---

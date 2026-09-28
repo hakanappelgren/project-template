@@ -51,6 +51,7 @@ Ask Håkan: **"Has this project ever stalled on something that 'couldn't be done
 For each answer, dispatch the researcher agent to settle it properly and write `docs/research/[topic].md` with a real verdict. Past stalls are usually CONDITIONAL, not BLOCKED — a settled verdict can un-stall a parked project.
 
 Known examples to check if relevant:
+
 - Background audio on iOS: silent switch mutes Web Audio API but NOT `<audio>` elements; Safari tab background playback works with audio element + Media Session API; installed PWAs get suspended → escalation: Capacitor wrapper
 - Background downloads: page-JS fetch gets throttled in background tabs; check mechanism used
 

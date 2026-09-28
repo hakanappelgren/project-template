@@ -11,8 +11,8 @@
 _The shared vocabulary. Use these exact words in code (variable names, function names, types),
 in conversations, and in docs. Ambiguous language = ambiguous code._
 
-| Term | Definition |
-|------|-----------|
+| Term   | Definition                            |
+| ------ | ------------------------------------- |
 | _Term_ | _What it means in this app's context_ |
 
 ---
@@ -34,6 +34,7 @@ type EntityName = {
 ```
 
 **Rules:**
+
 - _Business rule 1 (e.g. "a client must have at least one contact")_
 - _Business rule 2_
 
@@ -53,8 +54,8 @@ graph LR
 
 _The meaningful things that happen in this domain. These become the functions in `src/domain/`._
 
-| Operation | Inputs | Output | Rule |
-|-----------|--------|--------|------|
+| Operation     | Inputs           | Output   | Rule         |
+| ------------- | ---------------- | -------- | ------------ |
 | _doSomething_ | _entity, params_ | _result_ | _constraint_ |
 
 ---
