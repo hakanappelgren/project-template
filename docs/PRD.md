@@ -45,6 +45,14 @@ _Describe 2–3 key user journeys as numbered steps. No UI wireframes needed —
 
 ---
 
+## Current state
+
+_Updated by `/close-feature` after each feature ships. The honest answer to "what does this product actually do right now?"_
+
+_Nothing shipped yet._
+
+---
+
 ## Open questions
 
 _Things we don't know yet. Resolve these before or early in development._

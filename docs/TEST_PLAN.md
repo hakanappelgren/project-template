@@ -1,81 +1,72 @@
 # Test Plan — {{PROJECT_NAME}}
 
-## Testing philosophy
+## Philosophy
 
-Red/Green TDD: write the failing test first, make it pass with minimal code, then refactor. Tests are not optional — they document intended behavior and enable confident refactoring.
+Test things that can **silently break** without a visible error. Skip tests that just restate the code or are too fragile to survive a refactor.
 
----
-
-## Test layers
-
-### Unit tests (`tests/unit/`)
-**What:** Domain logic and application use cases.
-**Framework:** Vitest
-**Speed:** <100ms per test. Zero external dependencies. Zero mocks (use in-memory port implementations).
-**Coverage target:** 100% of `domain/` and `application/` logic.
-**Run:** `npm test`
-
-### Integration tests (`tests/integration/`)
-**What:** API routes, infra adapters with real DB.
-**Framework:** Vitest
-**Speed:** Slower — hits real DB (test environment).
-**Coverage target:** All critical API routes and DB operations.
-**Run:** `npm test`
-
-### E2E tests (`tests/e2e/`)
-**What:** Critical user flows from the browser perspective.
-**Framework:** Playwright
-**Coverage:** At least one test per flow in `docs/flow/flows.json` (happy path + 1–2 edge cases).
-**Run:** `npm run test:e2e`
+Good tests: domain rules, coordinate math, data transformations, storage round-trips, stateful hook logic.
+Bad tests: rendering output, CSS, things that are just a React prop pass-through.
 
 ---
 
-## Test coverage map
+## What to test and where
 
-_Update this table as you add tests._
-
-| Area | Unit | Integration | E2E | Notes |
-|------|------|-------------|-----|-------|
-| _domain/[entity]_ | ⬜ | N/A | N/A | |
-| _application/[use-case]_ | ⬜ | N/A | N/A | |
-| _app/api/[route]_ | N/A | ⬜ | N/A | |
-| _[main user flow]_ | N/A | N/A | ⬜ | |
-
-Legend: ✅ covered, ⚠️ partial, ⬜ missing
+| Layer | Framework | When | Threshold |
+|-------|-----------|------|-----------|
+| `src/domain/` | Vitest | Always — write before implementing | Every factory fn + every business rule |
+| `src/infra/` | Vitest | Always — use fake adapters (fake-indexeddb etc.) | Every public function |
+| `src/application/` | Vitest | When logic is non-trivial or has caused bugs | Extract pure fns where possible; renderHook as last resort |
+| `src/components/` | — | Only if it contains business logic | Skip rendering/layout tests |
+| E2E | Playwright | One per major flow, after the flow is stable | Happy path + the most important error state |
 
 ---
 
-## Naming conventions
+## Coverage map
 
-```
-tests/unit/[domain-or-use-case].test.ts
-tests/integration/[route-or-adapter].test.ts
-tests/e2e/[flow-name].spec.ts
-```
+_Update as you add tests._
+
+| Area | Test file | Status |
+|------|-----------|--------|
+| `domain/[entity]` | `domain/[entity]/__tests__/[entity].test.ts` | ⬜ |
+| `infra/[adapter]` | `infra/[adapter]/__tests__/[adapter].test.ts` | ⬜ |
+| `application/[hook]` | `application/[hook]/__tests__/[logic].test.ts` | ⬜ |
+| _[main user flow]_ | `tests/e2e/[flow].spec.ts` | ⬜ |
+
+Legend: ✅ covered · ⚠️ partial · ⬜ missing
 
 ---
 
 ## Running tests
 
 ```bash
-npm test              # Unit + integration (Vitest)
-npm run test:watch    # Watch mode
-npm run test:e2e      # E2E (Playwright)
-npm run test:e2e -- --ui  # Playwright UI mode
+npm test              # Vitest (unit + integration)
+npm run test:watch    # Watch mode during development
+npm run test:e2e      # Playwright E2E
 ```
 
 ---
 
-## TDD workflow
+## TDD workflow (domain + application layer)
 
-1. Write a failing test describing the desired behavior
-2. Run `npm test` — confirm it fails with the right error
+1. Write a failing test that describes the intended behavior
+2. `npm test` — confirm it fails with the right error (not a syntax error)
 3. Write the minimum code to make it pass
-4. Run `npm test` — confirm it passes
-5. Refactor if needed — tests still pass
+4. `npm test` — confirm green
+5. Refactor if needed — tests still green
 
-Never skip step 1. If you can't write a test first, the design probably needs to change.
+Do not skip step 1. If you find it hard to write a test first, the function probably needs to be simpler or better named.
 
 ---
 
-_Last updated: [date]_
+## Regression rule
+
+When a bug is fixed, add a test that would have caught it. Name the test after what it prevents. Example:
+```ts
+it('does NOT overwrite connections when a node is dragged — regression for edge-wiping bug', () => {
+```
+
+This turns past pain into future protection.
+
+---
+
+_Last updated: {{date}}_

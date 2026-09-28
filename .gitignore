@@ -18,6 +18,9 @@ build/
 .claude/settings.local.json
 CLAUDE.local.md
 
+# Spikes — throwaway proofs, never committed (findings go in docs/research/)
+spikes/
+
 # Playwright
 playwright-report/
 test-results/
