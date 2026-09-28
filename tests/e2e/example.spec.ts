@@ -8,5 +8,5 @@ import { test, expect } from '@playwright/test'
 test('home page loads', async ({ page }) => {
   await page.goto('/')
   // Replace with a real assertion about your app's home page
-  await expect(page).toHaveTitle(//)
+  await expect(page).toHaveTitle(/.+/)
 })
