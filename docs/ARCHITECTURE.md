@@ -50,6 +50,7 @@ src/
 ```
 
 **Layer dependency rules:**
+
 - `domain/` — no imports from any other layer
 - `application/` — imports `domain/` only
 - `infra/` — imports `domain/` and `application/`
@@ -100,13 +101,13 @@ sequenceDiagram
 
 ## Infrastructure & deployment
 
-| Concern | Choice | Why |
-|---------|--------|-----|
-| Hosting | Vercel (Hobby) | Auto-deploy from main branch, free tier |
-| Database | _TBD_ | |
-| LLM | _Ollama (local) / Anthropic API_ | |
-| Auth | _None / Supabase Auth_ | |
-| Error monitoring | _Sentry (free tier)_ | |
+| Concern          | Choice                           | Why                                     |
+| ---------------- | -------------------------------- | --------------------------------------- |
+| Hosting          | Vercel (Hobby)                   | Auto-deploy from main branch, free tier |
+| Database         | _TBD_                            |                                         |
+| LLM              | _Ollama (local) / Anthropic API_ |                                         |
+| Auth             | _None / Supabase Auth_           |                                         |
+| Error monitoring | _Sentry (free tier)_             |                                         |
 
 ---
 
@@ -114,14 +115,14 @@ sequenceDiagram
 
 _Updated at kickoff and whenever services change._
 
-| Service | Free tier | Paid trigger | Monthly if paid |
-|---------|-----------|-------------|----------------|
-| Vercel | Hobby: 100GB BW | >100GB or team | $20/month |
-| Supabase | 500MB DB, 2 projects | >500MB | $25/month |
-| Anthropic | Pay-per-use | Per token | Varies |
-| Sentry | 5k errors/month | >5k | $26/month |
-| Ollama | Free forever | Never | $0 |
-| SQLite (local) | Free forever | Never | $0 |
+| Service        | Free tier            | Paid trigger   | Monthly if paid |
+| -------------- | -------------------- | -------------- | --------------- |
+| Vercel         | Hobby: 100GB BW      | >100GB or team | $20/month       |
+| Supabase       | 500MB DB, 2 projects | >500MB         | $25/month       |
+| Anthropic      | Pay-per-use          | Per token      | Varies          |
+| Sentry         | 5k errors/month      | >5k            | $26/month       |
+| Ollama         | Free forever         | Never          | $0              |
+| SQLite (local) | Free forever         | Never          | $0              |
 
 **Current estimated monthly cost:** $0 (_free tier_)
 
@@ -141,8 +142,8 @@ _Select at kickoff:_
 
 ## Architecture Decision Records
 
-| ADR | Decision | Status |
-|-----|---------|--------|
+| ADR                                   | Decision                                | Status   |
+| ------------------------------------- | --------------------------------------- | -------- |
 | [ADR-001](decisions/ADR-001-stack.md) | Stack and reference architecture choice | Accepted |
 
 ---

@@ -9,6 +9,8 @@ const __dirname = dirname(__filename)
 const compat = new FlatCompat({ baseDirectory: __dirname })
 
 const eslintConfig = [
+  // Build output and Next's generated types aren't source — same ignores as research-pod.
+  { ignores: ['.next/**', 'next-env.d.ts'] },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   prettierConfig,
 ]

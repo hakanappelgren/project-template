@@ -32,10 +32,7 @@
           "notes": ""
         }
       ],
-      "edge_cases": [
-        "What happens if the action fails",
-        "What happens with empty/invalid input"
-      ]
+      "edge_cases": ["What happens if the action fails", "What happens with empty/invalid input"]
     }
   ]
 }
