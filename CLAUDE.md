@@ -169,6 +169,8 @@ Dispatching agents for tiny/small work is overkill — the machinery exists for 
 - Dark mode required on every page (class-based, `dark` on `<html>`)
 - Primary action color: `bg-brand` (#00968C) — one per screen max
 - Cards: `border border-border shadow-sm rounded-lg p-5`
+- Action buttons in a list sit in one fixed right-hand column, same position and order on every row — work down a list without moving the mouse across the screen (stacking below is fine on mobile)
+- Before UI work counts as done: screenshot every changed screen (light + dark) and look at it — tests and HTTP 200 pass on an unstyled page
 
 ## Git rules
 
