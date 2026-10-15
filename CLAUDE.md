@@ -12,7 +12,7 @@
 | Backend    | _fill in_                                           |
 | LLM        | _Ollama (local) / Anthropic API — see .env.example_ |
 | Testing    | Vitest + Testing Library + Playwright               |
-| Dev server | `npm run dev` → http://localhost:3000               |
+| Dev server | `npm run dev` → http://localhost:3410               |
 
 ## Dev server
 
