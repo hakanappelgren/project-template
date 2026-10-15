@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3410',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -17,7 +17,7 @@ export default defineConfig({
   webServer: process.env.CI
     ? {
         command: 'npm run build && npm run start',
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3410',
         reuseExistingServer: false,
         timeout: 120_000,
       }
