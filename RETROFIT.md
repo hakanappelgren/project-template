@@ -12,31 +12,33 @@ Open a Claude session in the project and say:
 
 ## Steps (for the agent running this)
 
-### 1. Copy the agent team
+### 1. Enable the devteam plugin
 
-Copy `_template/.claude/agents/` → `[project]/.claude/agents/` wholesale. These are project-independent; overwrite is safe.
+The agents and commands are **not copied** into projects any more — they come from the `devteam` plugin (`hakanappelgren/claude-devteam`). Add the `extraKnownMarketplaces` + `enabledPlugins` blocks from `_template/.claude/settings.json` to `[project]/.claude/settings.json` (create it if missing; never touch `settings.local.json`).
 
-### 2. Sync the commands
+Pre-commit hook: copy it too, but only if the project has `npm run lint` and `npm run typecheck`. For a non-Node project, adapt it to an equivalent cheap check (e.g. `python3 -m py_compile` + `bash -n` for a Python/shell project) and test it blocks a broken file before committing.
 
-Copy from `_template/.claude/commands/` → `[project]/.claude/commands/`:
+### 2. Remove old local copies of agents and commands
 
-- `spike.md` — new, copy as-is
-- `kickoff.md`, `feature.md`, `plan.md`, `review.md` — replace, **unless** the project's copy has project-specific edits (diff first; if edited, merge the new phases in rather than overwriting)
-- All others — replace with template versions if the project's copies are unmodified
+If the project has `.claude/agents/` or `.claude/commands/` copied from an older template, delete them — otherwise they shadow the plugin and drift. Diff first: any **project-specific** rule in them moves into the project's CLAUDE.md before deleting. Project-only skills/commands that never came from the template stay.
 
 ### 3. Merge CLAUDE.md — carefully
 
 **Never overwrite the project's CLAUDE.md.** It contains project truth (stack, key files, lessons learned). Merge in only these sections from the template:
 
-- **Development sequence** (now 8 steps with tech discovery) — replace the old sequence block
+- **Session start** — read HANDOFF, check ROADMAP NOW and `features/`
+- **Development sequence** (8 steps with tech discovery) — replace the old sequence block
 - **The team — one lead, dispatched specialists** — new section, insert after Development sequence
-- **Agent team — available commands** — add the `/spike` row
-- **Effort calibration** — replace with the 4-column version (adds "Who does the work")
+- **Agent team — available commands** — replace with the template's version (it says commands are `/devteam:<name>` and come from the plugin)
+- **Effort calibration** — replace with the 4-column version (adds "Who does the work"); adapt the examples to the product
 
-Leave untouched: Stack, Key files, DDD, Layer rules, Design rules, Git rules, Testing rules, Red flags, Lessons Learned.
+Leave untouched: Stack, Key files, DDD, Layer rules, Design rules, Git rules, Testing rules, Red flags, Lessons Learned. Don't import template sections that don't fit the stack (DDD/layer/design rules are Next.js-specific).
 
-### 4. Add the new directories and gitignore entry
+### 4. Add the living docs, directories and gitignore entry
 
+- `docs/ROADMAP.md` — if missing, create it in the format from `~/dev/CLAUDE.md` (frontmatter + NOW/NEXT/LATER/Done). Without it the project shows as `unclassified` in the portfolio. If the PRD has a backlog, move it here and leave a link — never keep the plan in two places.
+- `docs/HANDOFF.md` — copy from the template and fill in for this session
+- `features/README.md` — copy from the template
 - Create `docs/research/` with a `.gitkeep`
 - Add to `.gitignore`:
   ```
@@ -61,10 +63,11 @@ Closed features stay as they are. No retroactive research briefs, no re-reviews.
 
 ### 7. Verify
 
-- `.claude/agents/` has 6 agent files + README
-- `/spike` appears in the project's command list and CLAUDE.md
-- CLAUDE.md sequence shows 8 steps including tech discovery
-- Report to Håkan: what was copied, what was merged, what conflicts needed judgment
+- `.claude/settings.json` enables `devteam@hakan-devteam`; no stale `.claude/agents/` or template-copied `.claude/commands/` left
+- The pre-commit hook passes on the current code and blocks a broken file
+- CLAUDE.md sequence shows 8 steps including tech discovery; commands section points to `/devteam:<name>`
+- `docs/ROADMAP.md` exists and the project is no longer `unclassified` after re-running `python3 ~/Obsidian/Work/40\ Projects/portfolio/generate.py`
+- Report to Håkan: what was copied, what was merged, what was skipped as not fitting the stack, what conflicts needed judgment
 
 ## Rollout policy
 
