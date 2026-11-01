@@ -10,7 +10,7 @@ export function createLLM(): LLMPort {
 
   if (provider === 'anthropic') {
     return new AnthropicAdapter({
-      model: process.env.ANTHROPIC_MODEL ?? 'claude-haiku-4-5-20251001',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-haiku-5-5',
     })
   }
 
