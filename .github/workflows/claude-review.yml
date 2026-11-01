@@ -14,7 +14,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      id-token: write
     # Runs on the Claude subscription (no per-review API bill). One-time setup:
     #   claude setup-token
     #   gh secret set CLAUDE_CODE_OAUTH_TOKEN
