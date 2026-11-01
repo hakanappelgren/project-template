@@ -54,3 +54,56 @@ describe('OllamaAdapter', () => {
     )
   })
 })
+
+describe('AnthropicAdapter', () => {
+  // A fake Messages API reply; the SDK reads it through the stubbed fetch.
+  function stubClaudeReply(body: object) {
+    const fakeFetch = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      })
+    )
+    vi.stubGlobal('fetch', fakeFetch)
+    return fakeFetch
+  }
+
+  const reply = {
+    id: 'msg_1',
+    type: 'message',
+    role: 'assistant',
+    model: 'claude-haiku-5-5',
+    stop_reason: 'end_turn',
+    stop_details: null,
+    usage: { input_tokens: 1, output_tokens: 1 },
+  }
+
+  it('returns the text even when a thinking block comes first', async () => {
+    const fakeFetch = stubClaudeReply({
+      ...reply,
+      content: [
+        { type: 'thinking', thinking: '', signature: 'sig' },
+        { type: 'text', text: 'hello' },
+      ],
+    })
+
+    const text = await new AnthropicAdapter({ apiKey: 'test-key' }).complete('hi')
+
+    expect(text).toBe('hello')
+    const body = JSON.parse(fakeFetch.mock.calls[0][1].body)
+    expect(body.model).toBe('claude-haiku-5-5')
+    expect(body.max_tokens).toBe(4096)
+  })
+
+  it('throws a readable error when Claude declines the request', async () => {
+    stubClaudeReply({
+      ...reply,
+      content: [],
+      stop_reason: 'refusal',
+      stop_details: { type: 'refusal', category: 'cyber', explanation: null },
+    })
+    await expect(new AnthropicAdapter({ apiKey: 'test-key' }).complete('hi')).rejects.toThrow(
+      /declined.*cyber/
+    )
+  })
+})

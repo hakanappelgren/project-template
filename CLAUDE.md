@@ -6,7 +6,7 @@
 
 | Concern    | Choice                                              |
 | ---------- | --------------------------------------------------- |
-| Framework  | Next.js 15 (App Router)                             |
+| Framework  | Next.js 16 (App Router)                             |
 | Language   | TypeScript (strict)                                 |
 | Styling    | Tailwind CSS v4 + so-design-system                  |
 | Backend    | _fill in_                                           |

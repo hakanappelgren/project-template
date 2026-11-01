@@ -12,7 +12,7 @@ Every project needs a baseline stack decision. We want consistency across projec
 
 ## Decision
 
-**Framework:** Next.js 15 with App Router
+**Framework:** Next.js 16 with App Router
 **Language:** TypeScript (strict mode)
 **Styling:** Tailwind CSS v4 + so-design-system (SeventyOne brand tokens + components)
 **Testing:** Vitest (unit + integration) + Playwright (E2E)
