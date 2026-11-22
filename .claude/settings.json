@@ -21,6 +21,13 @@
     }
   },
   "enabledPlugins": {
-    "devteam@hakan-devteam": true
+    "devteam@hakan-devteam": true,
+    "sales@knowledge-work-plugins": false,
+    "legal@knowledge-work-plugins": false,
+    "marketing@knowledge-work-plugins": false,
+    "brand-voice@knowledge-work-plugins": false,
+    "slack-by-salesforce@knowledge-work-plugins": false,
+    "product-management@knowledge-work-plugins": false,
+    "pdf-viewer@knowledge-work-plugins": false
   }
 }
