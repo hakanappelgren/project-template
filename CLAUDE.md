@@ -89,78 +89,15 @@ At the start of every continuation session:
 2. Check `features/` for any in-progress feature artifacts
 3. Run `npm run dev` (see Dev server above)
 
-## Development sequence
+## Process
 
-For medium / large work, follow this order. No skipping steps. No building before design is approved.
+The team, agents, commands and the gated feature sequence come from the **devteam plugin** (`/devteam:feature`, `/devteam:kickoff`, `/devteam:handoff` …). Rules: the plugin's `TEAM.md`; sequence and size check: its `commands/feature.md`. Don't restate them here — this file holds only what is specific to this project.
 
-```
-1. Understand       /explore or /kickoff    → problem statement, for whom, why now
-2. Acceptance       /feature (Phase 2)      → features/[name]/acceptance-criteria.md
-3. Tech discovery   researcher + /spike     → research-brief.md — only if new platform
-                                              capabilities are involved
-                                              ↑ GATE — no unproven capability enters the plan
-4. Visual design    designer agent          → docs/design/[name].html
-                                              ↑ GATE — Håkan approves screens
-5. Tech design      /plan (lead)            → features/[name]/plan.md
-                                              ↑ GATE — Håkan approves plan
-6. Build            builder agent           → TDD → implement → all tests green
-7. Review           reviewer agent (fresh)  → adversarial check vs acceptance criteria
-                                              ↑ GATE — must pass before merge
-8. Close            doc-keeper agent        → update living docs, archive artifacts
-```
-
-Discovery is two-sided: steps 1–2 from the user/functionality perspective, step 3 from the technical perspective. "We can't do X" is a hypothesis, never a verdict — it gets a researcher verdict (PROVEN / CONDITIONAL / BLOCKED / UNKNOWN) and a `/spike` on the real device if unresolved.
-
-## The team — one lead, dispatched specialists
-
-The **lead** is the main session (strongest model available). It talks to Håkan, holds the gates, makes architecture decisions, and dispatches work. It writes code itself only for tiny/small work. Specialists start cold — **the artifacts are the dispatch payload** (acceptance-criteria.md, research-brief.md, plan.md, design html). Full rules: `TEAM.md` in the devteam plugin.
-
-| Agent       | Model  | Dispatched for                                           |
-| ----------- | ------ | -------------------------------------------------------- |
-| researcher  | sonnet | Prior art on GitHub/web, capability feasibility verdicts |
-| designer    | sonnet | HTML mockups from acceptance criteria                    |
-| builder     | sonnet | Implementation from approved plan + mockup               |
-| test-writer | haiku  | Tests from an approved test plan                         |
-| reviewer    | opus   | Pre-merge review — fresh context, diff + artifacts only  |
-| doc-keeper  | haiku  | close-feature, handoff, flow-doc, standup                |
-
-Models are aliases (tiers), never version strings — the setup survives model/plan changes untouched.
-
-## Agent team — available commands
-
-**The shared agents and commands come from the `devteam` plugin** (repo `hakanappelgren/claude-devteam`, enabled in `.claude/settings.json`). Type them as `/devteam:<name>`. Change them in that repo, never here — project-specific rules go in this file.
-
-| Command                 | Purpose                                                                      |
-| ----------------------- | ---------------------------------------------------------------------------- |
-| `/kickoff`              | New project: full discovery → visual design → tech design → ready to build   |
-| `/feature <name>`       | Build a feature: 7-phase sequence from understand to close                   |
-| `/explore [topic]`      | Open-ended discovery — stay in problem space, no solutions yet               |
-| `/design [name]`        | Visual design → HTML mockup in docs/design/[name].html                       |
-| `/plan [name]`          | Tech design → architecture + layers + plan.md (requires capability evidence) |
-| `/spike [capability]`   | Throwaway proof of a risky platform capability on the real device            |
-| `/review [name]`        | Adversarial review vs acceptance criteria before merging                     |
-| `/close-feature <name>` | Update living docs + archive feature artifacts after review passes           |
-| `/pm [topic]`           | Deepen requirements, update PRD                                              |
-| `/tech-lead [topic]`    | Research options, codebase health check, refactor                            |
-| `/architect [topic]`    | Architecture decisions, write ADRs                                           |
-| `/qa [topic]`           | Test plans, write E2E tests                                                  |
-| `/retro`                | Sprint retrospective + update Lessons Learned                                |
-| `/standup`              | Quick status: what shipped, what's next, any blockers                        |
-| `/flow-doc`             | Regenerate docs/flow/ documentation                                          |
-| `/handoff`              | Write session handoff before closing                                         |
-
-## Effort calibration
-
-Match effort to task size — don't over-engineer. **The lead classifies every incoming request against this table first**, then routes:
-
-| Size       | Examples                                             | Process             | Who does the work                                      |
-| ---------- | ---------------------------------------------------- | ------------------- | ------------------------------------------------------ |
-| **Tiny**   | Typo, color change, one-liner                        | Just do it          | Lead, directly — no dispatch                           |
-| **Small**  | Bug fix, add a field, minor style                    | Fix + test + commit | Lead, directly — no dispatch                           |
-| **Medium** | New screen, new API endpoint                         | `/feature` process  | Lead orchestrates, agents execute                      |
-| **Large**  | New domain area, new integration, new product branch | `/kickoff`-style    | Lead orchestrates, agents execute, full tech discovery |
-
-Dispatching agents for tiny/small work is overkill — the machinery exists for medium/large only. When in doubt between small and medium, ask: does this need acceptance criteria? If yes, it's medium.
+- **Check it loaded:** at session start the skills list must contain `devteam:*` entries. If it doesn't, tell Håkan before any work — the session would run without the process. Fix: `claude plugin install devteam@hakan-devteam --scope user`, then a new session.
+- **Size:** tiny/small → the lead does it directly (fix + test + commit). Medium/large → `/devteam:feature`. Does it need acceptance criteria? Then it's medium.
+- **Håkan's gates:** the idea (Phase 1 — he wants to be there) and the acceptance criteria. Design only for a large UI change (3–5 alternatives, he picks). Plan only for large work.
+- **One review:** the reviewer agent, fresh context. No CI review bot.
+- **Parallel sessions:** skill `branch-per-session` — every task its own branch from a fresh `origin/main`, synced with `main` again before merge.
 
 ## Design rules
 
